@@ -1,2 +1,11 @@
+" Configure colour scheme and font
+if has("gui_running")
+    colo wombat
+    set guifont=Source\ Code\ Pro\ Medium\ 10
+else
+    set t_Co=256
+    colorscheme wombat256mod
+endif
+
+" Turn on synutax highlighting
 syntax on
-colorscheme wombat
