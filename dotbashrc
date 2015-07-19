@@ -1,0 +1,50 @@
+# Source additional bash run configurations if present
+[ -f ~/civica.bashrc ] && source ~/civica.bashrc
+
+# Define colours
+RED='\[\e[0;31m\]'
+GREEN='\[\e[0;32m\]'
+BLUE='\[\e[0;34m\]'
+NORMAL="\e[0m"
+
+# Function to extract various archives
+extract () {
+   if [ -f $1 ] ; then
+       case $1 in
+           *.tar.bz2)   tar xvjf $1    ;;
+           *.tar.gz)    tar xvzf $1    ;;
+           *.bz2)       bunzip2 $1     ;;
+           *.rar)       unrar x $1     ;;
+           *.gz)        gunzip $1      ;;
+           *.tar)       tar xvf $1     ;;
+           *.tbz2)      tar xvjf $1    ;;
+           *.tgz)       tar xvzf $1    ;;
+           *.zip)       unzip $1       ;;
+           *.Z)         uncompress $1  ;;
+           *.7z)        7z x $1        ;;
+           *)           echo "don't know how to extract '$1'..." ;;
+       esac
+   else
+       echo "'$1' is not a valid file!"
+   fi
+ }
+
+# Specify command to be run before prompt is displayed
+PROMPT_COMMAND=smile_prompt
+
+# Function sets PS1 to working directory with
+# a smiley/frowney face prompt (depending on
+# return code of last command) on a new line
+function smile_prompt
+{
+  if [ "$?" -eq "0" ]
+  then
+    #smiley
+    SC="${GREEN}:)"
+  else
+    #frowney
+    SC="${RED}:("
+  fi
+
+  PS1="$(pwd)\n${SC}${NORMAL} "
+}
