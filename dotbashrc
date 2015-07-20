@@ -1,11 +1,11 @@
 # Source additional bash run configurations if present
-[ -f ~/civica.bashrc ] && source ~/civica.bashrc
+[ -f ~/.civica.bashrc ] && source ~/.civica.bashrc
 
 # Define colours
-RED='\[\e[0;31m\]'
-GREEN='\[\e[0;32m\]'
-BLUE='\[\e[0;34m\]'
-NORMAL="\e[0m"
+RED='\e[0;31m'
+GREEN='\e[0;32m'
+BLUE='\e[0;34m'
+NORMAL='\e[0m'
 
 # Function to extract various archives
 extract () {
@@ -40,11 +40,88 @@ function smile_prompt
   if [ "$?" -eq "0" ]
   then
     #smiley
-    SC="${GREEN}:)"
+    COLOR=${GREEN}
+    PROMPT=":) #"
   else
     #frowney
-    SC="${RED}:("
+    COLOR=${RED}
+    PROMPT=":( #"
   fi
 
-  PS1="$(pwd)\n${SC}${NORMAL} "
+  # Display current working directory in a 
+  # number (directory level) seperated format
+  i=`pwd | grep -o '/' | wc -l`
+  PWDEXT=${COLOR}`echo $PWD | sed 's,\/,,'`
+  while [ $i -gt 0 ] ; do let i=i-1 && PWDEXT=`echo $PWDEXT | sed 's,\/, \\\e[100;97m'${i}'\\'${COLOR}' ,'`; done
+
+  PS1="${PWDEXT}\n${COLOR}${PROMPT}${NORMAL} "
 }
+
+# Prompt displays current working directory in
+# a number (directory level) format. This function
+# changes directory to the level (number) specified
+cds ()
+{
+    ME=''
+    dd='../'
+    if ! [[ "$1" =~ ^[0-9]+$ ]] ; 
+    then
+        exec >&2; echo "error: Not a number"; exit 1
+    fi
+
+    for (( c=0; c<$1; c++ ))
+    do
+        ME=$ME$dd
+    done
+    cd $ME
+}
+
+
+# Git 
+alias gs='git status'
+alias gdt='git difftool -y'
+
+gitsub()
+{
+    git submodule update --init --recursive
+    git submodule update --recursive
+}
+
+# Other Aliases
+alias cl='clear'
+
+# Fix this
+gitlog ()
+{
+    currentSha1=`git log -n1 | grep commit | cut -d ' ' -f2`
+    nextSha1=`git log -n2 | grep commit | tail -n +2 | cut -d ' ' -f2`
+    num=18
+
+    if [[ "$1" =~ ^[0-9]+$ ]]
+    then
+        num=$1
+    fi
+    
+    clear
+    clear
+    git log master | grep $currentSha1 -B $num | sed '$ d'
+    echo -e "--------------------------------------------------------------------------------\n"
+    git log --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' -n1
+    echo -e "\n--------------------------------------------------------------------------------\n"    
+    git log master | grep $nextSha1 -A $num | sed '$ d'
+
+}
+
+# define color to additional file types
+export LS_COLORS="*.c=0;35:*.h=0;35"
+
+# leave some commands out of history log
+export HISTIGNORE="&:??:[ ]*:ls:clear:exit:logout:pwd:cd:cl:lklk"
+# ignore duplicate commands
+export HISTCONTROL=ignoredups
+# add time stamp
+export HISTTIMEFORMAT="%h %d %H:%M:%S> "
+# and set the size
+export HISTSIZE=10000
+
+
