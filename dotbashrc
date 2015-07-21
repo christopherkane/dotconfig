@@ -1,5 +1,6 @@
 # Source additional bash run configurations if present
 [ -f ~/.civica.bashrc ] && source ~/.civica.bashrc
+[ -f ~/.calix.bashrc ] && source ~/.calix.bashrc
 
 # Define colours
 RED='\e[0;31m'
@@ -54,7 +55,7 @@ function smile_prompt
   PWDEXT=${COLOR}`echo $PWD | sed 's,\/,,'`
   while [ $i -gt 0 ] ; do let i=i-1 && PWDEXT=`echo $PWDEXT | sed 's,\/, \\\e[100;97m'${i}'\\'${COLOR}' ,'`; done
 
-  PS1="${PWDEXT}\n${COLOR}${PROMPT}${NORMAL} "
+  PS1="\n${PWDEXT}\n${COLOR}${PROMPT}${NORMAL} "
 }
 
 # Prompt displays current working directory in
