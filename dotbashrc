@@ -41,11 +41,11 @@ function smile_prompt
   then
     #smiley
     COLOR=${GREEN}
-    PROMPT=":) #"
+    PROMPT=":) # "
   else
     #frowney
     COLOR=${RED}
-    PROMPT=":( #"
+    PROMPT=":( # "
   fi
 
   # Display current working directory in a 
@@ -54,7 +54,7 @@ function smile_prompt
   PWDEXT=${COLOR}`echo $PWD | sed 's,\/,,'`
   while [ $i -gt 0 ] ; do let i=i-1 && PWDEXT=`echo $PWDEXT | sed 's,\/, \\\e[100;97m'${i}'\\'${COLOR}' ,'`; done
 
-  PS1="${PWDEXT}\n${COLOR}${PROMPT}${NORMAL} "
+  PS1="${PWDEXT}\n\[${COLOR}\]${PROMPT}\[${NORMAL}\]"
 }
 
 # Prompt displays current working directory in
