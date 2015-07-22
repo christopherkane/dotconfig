@@ -1,3 +1,8 @@
+" Source external vimrc files
+if filereadable(glob("~/.calix.vimrc")) 
+    source ~/.calix.vimrc
+endif
+
 " Configure colour scheme and font
 if has("gui_running")
     colo wombat
@@ -9,3 +14,72 @@ endif
 
 " Turn on synutax highlighting
 syntax on
+
+"Turn on filetype detection
+filetype on
+
+" Highlight all search matches
+set hlsearch
+
+" Ignore case when searching
+set ignorecase
+
+" Highlight, then enter search mode
+nnoremap <silent> <2-LeftMouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
+
+" Update file type associations
+au BufRead, BufNewFile *.bbclass set filetype=make
+au BufRead, BufNewFile *.bb set filetype=make
+autocmd BufReadPost *
+\ if line("'\"") > 0 && line("'\"") <= line("$") |
+\   exe "normal! g`\"" |
+\ endif
+
+" Tell vim how man columns a tab counts for
+set tabstop=4
+
+" How many columns >> or << 
+set shiftwidth=4
+
+" Replaced tabs with spaces
+set expandtab
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+  set mousemodel=popup_setpos
+endif
+
+" Auto-completion
+set wildmenu
+set wildmode=list:longest,full
+
+" Alt+arrow window navigation
+nmap <silent> <[A> :wincmd k<CR>
+nmap <silent> <[B> :wincmd j<CR>
+nmap <silent> <[D> :wincmd h<CR>
+nmap <silent> <[C> :wincmd l<CR>
+
+" Avoid "hit ENTER to continue" messages
+set shortmess+=A
+
+" Turn on line numbers
+set number
+
+" Highlight matching bracket
+set showmatch
+hi MatchParen cterm=bold ctermbg=green ctermfg=green
+
+" Autoindent on new line
+set autoindent
+
+" Auto insert one extra level of indentation in various cases
+set smartindent
+
+imap <C-Return> <CR><CR><C-o>k<Tab>
+
+" New window mapping
+nmap <leader>sw<left>  :topleft  vnew<CR>
+nmap <leader>sw<right> :botright vnew<CR>
+nmap <leader>sw<up>    :topleft  new<CR>
+nmap <leader>sw<down>  :botright new<CR>

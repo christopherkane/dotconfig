@@ -1,5 +1,6 @@
 # Source additional bash run configurations if present
 [ -f ~/.civica.bashrc ] && source ~/.civica.bashrc
+[ -f ~/.calix.bashrc ] && source ~/.calix.bashrc
 
 # Define colours
 RED='\e[0;31m'
