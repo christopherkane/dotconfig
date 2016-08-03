@@ -1,12 +1,16 @@
 " Source external vimrc files
-if filereadable(glob("~/.calix.vimrc")) 
-    source ~/.calix.vimrc
+if filereadable(glob("~/.cal.vimrc")) 
+    source ~/.cal.vimrc
+endif
+if filereadable(glob("~/.civ.vimrc")) 
+    source ~/.civ.vimrc
 endif
 
-" Configure colour scheme and font
+" Configure colour scheme, font, anmd window to fullscreen
 if has("gui_running")
     colo wombat
-    set guifont=Source\ Code\ Pro\ Medium\ 10
+    set guifont=Monospace\ 10
+    set lines=999 columns=999
 else
     set t_Co=256
     colorscheme wombat256mod
@@ -83,3 +87,51 @@ nmap <leader>sw<left>  :topleft  vnew<CR>
 nmap <leader>sw<right> :botright vnew<CR>
 nmap <leader>sw<up>    :topleft  new<CR>
 nmap <leader>sw<down>  :botright new<CR>
+
+" Notify by way of subtle highlighting of text exceeding 100 character limit
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%101v.\+/
+
+" switch higlight no matter the previous state
+nmap <F4> :set hls! <cr>
+
+" Refresh cscope database 
+nmap <F11> :!find . -iname '*.c' -o -iname '*.h' > cscope.files<CR>
+  \:!cscope -b -i cscope.files -f cscope.out<CR>
+  \:cs reset<CR><CR>
+
+" hit '/' or '#' or '*' or 'L-Click' highlights then enter search mode
+nnoremap / :set hlsearch<cr>/
+nnoremap # :set hlsearch<cr>#
+nnoremap * :set hlsearch<cr>*
+nnoremap <silent> <2-LeftMouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
+
+" Start searching after each character is typed into the search
+set incsearch
+
+" Wrap text
+set textwidth=200
+
+" Display
+set showcmd
+
+" Detect updated files
+set autoread
+
+" Treat util files like tcl files, syntax highlighting
+au BufNewFile,BufRead *.utils set filetype=tcl
+
+"Treat *.dpl and *.ppl files as *.c
+au BufRead,BufNewFile *.dpl set filetype=c
+au BufRead,BufNewFile *.ppl set filetype=c
+
+autocmd BufRead,BufNewFile configurations.c call FoldPreprocessor()
+function! FoldPreprocessor()
+    set foldmarker=#ifdef,#endif
+    set foldmethod=marker
+endfunction
+
+inoremap <F9> <C-O>za
+nnoremap <F9> za
+onoremap <F9> <C-C>za
+vnoremap <F9> zf
