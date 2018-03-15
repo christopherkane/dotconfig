@@ -121,9 +121,12 @@ set autoread
 " Treat util files like tcl files, syntax highlighting
 au BufNewFile,BufRead *.utils set filetype=tcl
 
-"Treat *.dpl and *.ppl files as *.c
+" Treat *.dpl and *.ppl files as *.c
 au BufRead,BufNewFile *.dpl set filetype=c
 au BufRead,BufNewFile *.ppl set filetype=c
+
+" git; wrap at 27 characters and spell check
+au Filetype gitcommit set spell textwidth=72
 
 autocmd BufRead,BufNewFile configurations.c call FoldPreprocessor()
 function! FoldPreprocessor()
