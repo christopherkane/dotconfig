@@ -127,14 +127,3 @@ au BufRead,BufNewFile *.ppl set filetype=c
 
 " git; wrap at 27 characters and spell check
 au Filetype gitcommit set spell textwidth=72
-
-autocmd BufRead,BufNewFile configurations.c call FoldPreprocessor()
-function! FoldPreprocessor()
-    set foldmarker=#ifdef,#endif
-    set foldmethod=marker
-endfunction
-
-inoremap <F9> <C-O>za
-nnoremap <F9> za
-onoremap <F9> <C-C>za
-vnoremap <F9> zf
