@@ -2,6 +2,9 @@
 [ -f ~/.civica.bashrc ] && source ~/.civica.bashrc
 [ -f ~/.calix.bashrc ] && source ~/.calix.bashrc
 
+# Source git completion script
+source ./git-completion.bash
+
 # Define colours
 RED='\e[0;31m'
 GREEN='\e[0;32m'
