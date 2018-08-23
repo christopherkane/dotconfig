@@ -9,6 +9,7 @@ source ./git-completion.bash
 RED='\e[0;31m'
 GREEN='\e[0;32m'
 BLUE='\e[0;34m'
+YELLOW='\e[0;33m'
 NORMAL='\e[0m'
 
 # Function to extract various archives
@@ -36,6 +37,10 @@ extract () {
 # Specify command to be run before prompt is displayed
 PROMPT_COMMAND=smile_prompt
 
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 # Function sets PS1 to working directory with
 # a smiley/frowney face prompt (depending on
 # return code of last command) on a new line
@@ -58,7 +63,7 @@ function smile_prompt
   PWDEXT=${COLOR}`echo $PWD | sed 's,\/,,'`
   while [ $i -gt 0 ] ; do let i=i-1 && PWDEXT=`echo $PWDEXT | sed 's,\/, \\\e[100;97m'${i}'\\'${COLOR}' ,'`; done
 
-  PS1="${PWDEXT}\n\[${COLOR}\]${PROMPT}\[${NORMAL}\]"
+  PS1="${PWDEXT}\[${YELLOW}\]$(parse_git_branch)\n\[${COLOR}\]${PROMPT}\[${NORMAL}\]"
 }
 
 # Prompt displays current working directory in
